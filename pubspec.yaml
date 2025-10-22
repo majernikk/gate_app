@@ -1,4 +1,5 @@
 name: gate_app
+version: 1.0.0+3
 description: "Ovládanie garážovej brány cez MQTT pomocou Flutter aplikácie."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
