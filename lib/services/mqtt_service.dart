@@ -4,8 +4,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
 import '../models/gate_state.dart';
+
+import 'mqtt_client_factory.dart'
+  if (dart.library.html) 'mqtt_client_factory_web.dart';
 
 typedef StateCallback = void Function(GateState state);
 
@@ -22,7 +24,7 @@ class MqttService {
   String get _topicCmd => 'gate/$deviceId/cmd';
   String get _topicClients => 'gate/$deviceId/clients';
 
-  MqttServerClient? _client;
+  MqttClient? _client;
 
   bool get isConnected =>
       _client?.connectionStatus?.state == MqttConnectionState.connected;
@@ -50,23 +52,21 @@ class MqttService {
     _isConnecting = true;
     _explicitDisconnect = false;
 
-    final client = MqttServerClient(broker, _newClientId());
+    final cid = _newClientId();
+
+    final client = createMqttClient(
+      broker: broker,
+      clientId: cid,
+      portTls: portTls, // ignoruje sa na webe
+      portWss: portWss, // ignoruje sa mimo webu
+    );
+
     client.logging(on: false);
     client.keepAlivePeriod = 30;
     client.connectTimeoutPeriod = 8000;
     client.resubscribeOnAutoReconnect = true;
     client.onConnected = _onConnected;
     client.onDisconnected = _onDisconnected;
-
-    if (kIsWeb) {
-      client.useWebSocket = true;
-      client.secure = true;
-      client.port = portWss;
-      client.websocketProtocols = ['mqtt'];
-    } else {
-      client.secure = true;
-      client.port = portTls;
-    }
 
     final willStr = jsonEncode({'client': client.clientIdentifier, 'status': 'offline'});
     client.connectionMessage = MqttConnectMessage()
