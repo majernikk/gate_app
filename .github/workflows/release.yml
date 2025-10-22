@@ -69,4 +69,8 @@ jobs:
           echo "apk_path=$OUT" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release and upload APK
-        uses: softprops/act
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: ${{ steps.rename.outputs.apk_path }}
