@@ -57,3 +57,4 @@ ios/Runner/GoogleService-Info.plist
 .vscode/
 *.bak
 *.tmp
+keystore.b64
