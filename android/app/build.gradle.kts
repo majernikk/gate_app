@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "sk.majernik.brana"        // ← odporúčam zmeniť z com.example...
+    namespace = "com.example.gate_app"        // ← odporúčam zmeniť z com.example...
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,7 +20,7 @@ android {
     kotlinOptions { jvmTarget = JavaVersion.VERSION_11.toString() }
 
     defaultConfig {
-        applicationId = "sk.majernik.brana"  // ← tvoje unikátne ID
+        applicationId = "com.example.gate_app"  // ← tvoje unikátne ID
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
